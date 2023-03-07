@@ -33,15 +33,38 @@ def print_degree(edgelist, v):
             degree+=1
 
     print("Degree of vertex " + str(v) + ": " + str(degree))
+    return degree
 
 # A function that takes the following input: a list of edges
 # representing a graph, where each edge is a pair, and a vertex
 # index that is an integer. The output should be the clustering
 # coefficient of the input vertex.
 def print_cluster_coefficient(edgelist, v):
-    
+    deg = print_degree(edgelist, v)
+    v_list = []
+    edges = 0
+    # create a list of neighbor vertexes
+    for i in edgelist:
+        if int(i[0]) == v:
+            v_list.append(i[1])
+#    print("Neighbors of vertex",v,":",v_list)
 
-    print("NEEDS IMPLEMENTATION")
+    # find neighbors of v_list vertexes
+    for i in edgelist:
+        for j in v_list:
+            if int(i[0]) == int(j):
+                # compare if the neighbor is also a neighbor of 127
+                for k in v_list:
+                    if int(i[1]) == int(k):
+                        if i[0] != i[1]:
+                            edges+=1    # accounts for edges that self reference
+#                        print(i)
+    edges = int(edges/2)     # accounts for the fact that all edges are listed twice
+    possible = int((deg*(deg - 1))/2)
+    coeff = edges / possible
+
+    print("Cluster Coefficient of vertex",v,"=",coeff,"or",edges,"/",possible)
+    return coeff
     
 # A function that takes the following input: a list of edges
 # representing a graph, where each edge is a pair, and a vertex
