@@ -39,6 +39,8 @@ def print_degree(edgelist, v):
 # index that is an integer. The output should be the clustering
 # coefficient of the input vertex.
 def print_cluster_coefficient(edgelist, v):
+    
+
     print("NEEDS IMPLEMENTATION")
     
 # A function that takes the following input: a list of edges
@@ -76,7 +78,7 @@ def main():
     
     print_vertices(E)
     print_degree(E, vrt)
-#    print_cluster_coefficient(E, vrt)
+    print_cluster_coefficient(E, vrt)
 #    print_betweenness_centrality(E, vrt)
 #    print_average_shortest_path(E)
 #    print_adjacency_matrix(E)
