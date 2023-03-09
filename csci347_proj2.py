@@ -81,23 +81,46 @@ def print_cluster_coefficient(edgelist, v):
 # representing a graph, where each edge is a pair, and a vertex
 # index that is an integer. The output should be the betweenness
 # centrality of the input vertex.
-def print_betweenness_centrality(edgelist, graph, v):
+def print_betweenness_centrality(edgelist, v):
 
+    graph = nx.Graph()
+    for edge in edgelist:
+        if edge[0] != edge[1]:
+            graph.add_edge(edge[0], edge[1])
     verticies = graph.nodes
-    have_v = 0
-    tot = 0
+    
+    total_betweeness = 0
+    total_count = 0
+    nodes_copy = graph.nodes
+    vertices = graph.nodes
+    for source_vertex in vertices:
+        vertices_copy = vertices
+        running_ave = 0
+        for target_vertex in vertices_copy:
+            if source_vertex != target_vertex:
+                for node in nx.shortest_path(graph, source_vertex, target_vertex):
+                    if v == node:
+                        total_betweeness += 1
+    
+    '''
+    bc = 0
     for vertex1 in verticies:
         for vertex2 in verticies:
+            tot = 0
+            have_v = 0
             if vertex1 != vertex2 and vertex1 != str(v) and vertex2 != str(v):
-                for path in nx.all_shortest_paths(graph, vertex1, vertex2):
-                    tot+=1
-                    if str(v) in path:
-                        have_v+=1
-                        print(path)
+                paths = nx.all_shortest_paths(graph, vertex1, vertex2)
+                if paths == []:
+                    pass
+                else:
+                    for path in paths:
+                        tot+=1
+                        if str(v) in path:
+                            have_v+=1
+                            print(path)
+                bc += (have_v / tot)
                 
-            
-
-    return have_v / tot
+    return bc'''
 
 
 # A function that takes the following input: a list of edges
@@ -212,12 +235,11 @@ def main():
 
     bc = nx.betweenness_centrality(G)
     #print(bc)
+    print(print_betweenness_centrality(E, vrt))
     print("\nnx.bc(",vrt,") =",bc[str(vrt)])
-    #print(print_betweenness_centrality(E, G, vrt))
     #func not working
 
     # print(nx.clustering(G, nodes=str(vrt)))
-#    print_betweenness_centrality(E, vrt)
 
     print("Network x Average shortest path: ", nx.average_shortest_path_length(G))
     print("\n", "Our Average shortest path length")
