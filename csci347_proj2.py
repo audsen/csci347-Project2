@@ -101,11 +101,13 @@ def print_betweenness_centrality(edgelist, v):
                     betweenness = 0
                     count = 0
                     # Iterate through every list of shortest paths and add 1 to the count of shortest paths
-                    for node in nx.all_shortest_paths(graph, source_vertex, target_vertex):
+                    for path in nx.all_shortest_paths(graph, source_vertex, target_vertex):
                         count += 1
-                        # If the given vertex is in the path add to the betweenness
-                        if v == node:
-                            betweenness += 1
+                        # Iterate through given path and check to see if it contains v
+                        for node in path:
+                            # If the given vertex is in the path add to the betweenness
+                            if node == v:
+                                betweenness += 1
                     # add the betweenness / count to the total betweenness centrality
                     total_betweenness += betweenness / count
 
