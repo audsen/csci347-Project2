@@ -56,16 +56,12 @@ def print_cluster_coefficient(edgelist, v):
     deg = print_degree(edgelist, v)
     v_list = []
     edges = 0
-
-    temp = nx.Graph()
-
+    
     # create a list of neighbor vertices
     for i in edgelist:
         if int(i[0]) == v and i[1] not in v_list:
-            temp.add_edge(i[0], i[1])
             v_list.append(i[1])
         elif int(i[1]) == v and i[0] not in v_list:
-            temp.add_edge(i[0], i[1])
             v_list.append(i[0])
 
     # create_visualization(temp)
