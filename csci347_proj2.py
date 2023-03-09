@@ -102,19 +102,40 @@ def print_betweenness_centrality(edgelist, graph, v):
 # A function that takes the following input: a list of edges
 # representing a graph, where each edge is a pair. The output
 # should be the average shortest path length of the graph.
-def print_average_shortest_path(edgelist, graph):
-    # TODO: use breadth first search  and mark all nodes to find every vertex pair distance and then average
+def print_average_shortest_path(edgelist):
+    # Create graph to find shortest paths between pairs from the edgelist
+    graph = nx.Graph()
+    for edge in edgelist:
+        if edge[0] != edge[1]:
+            graph.add_edge(edge[0], edge[1])
+
     total_average = 0
+    total_count = 0
+    plot_list = []
 
     vertices = graph.nodes
     for source_vertex in vertices:
         vertices_copy = vertices
         running_ave = 0
         for target_vertex in vertices_copy:
-            if (source_vertex != target_vertex):
+            if source_vertex != target_vertex:
                 running_ave += len(nx.shortest_path(graph, source_vertex, target_vertex)) - 1
         running_ave = running_ave / len(vertices)
         total_average += running_ave
+        total_count += 1
+
+        # used to fill the list of averages to plot
+        # plot_list.append(total_average / total_count)
+
+
+
+    # Used for creating the plot that shows the average shortest path as we read in the nodes
+    # vertex_list = []
+    # for i in range(0, 986):
+    #     vertex_list.append(i)
+    # plt.scatter(vertex_list, plot_list)
+    # plt.show()
+
     total_average = total_average/ len(vertices)
     #print("Average shortest path: ", total_average)
     return total_average
@@ -123,17 +144,11 @@ def print_average_shortest_path(edgelist, graph):
 # A function that takes the following input: a list of edges
 # representing a graph, where each edge is a pair. The output
 # should be the dense adjacency matrix of the graph.
-def print_adjacency_matrix():
-    # The reason that I am creating the graph in this function is that it is less of a headache to work with the str instead of a Tuple
-    E = []
+def print_adjacency_matrix(E):
+    # the graph in this function is of strings instead of a tuple because it is less of a headache to work with the str instead of a Tuple
     # This includes the nodes that are self loops. It just won't mark them in the adjacency matrix
     nodeCount = 1005
-    with open("email-Eu-core.txt", "r") as file:
-        for line in file:
-            line = line.rstrip('\n')
-            edge = line.split(' ')
-            E.append(edge)
-    # initialize a matrix of size
+    # initialize a matrix of size 1005
     adjacency_matrix = np.zeros((nodeCount, nodeCount))
     # adding all edges to the adjacency matrix
     for edge in E:
@@ -150,6 +165,16 @@ def print_adjacency_matrix():
     print(adjacency_matrix)
     return adjacency_matrix
 
+
+def create_edgelist():
+    E = []
+    with open("email-Eu-core.txt", "r") as file:
+        for line in file:
+            line = line.rstrip('\n')
+            edge = line.split(' ')
+            E.append(edge)
+    return E
+
 def main():
     G = nx.Graph()
     E = []
@@ -164,6 +189,7 @@ def main():
 
 
     E = G.edges
+    print(E)
 
 
     # print(G.number_of_edges())
@@ -180,8 +206,8 @@ def main():
     print("\nNetworkX Adjacency Matrix: ")
     testMatrix = nx.adjacency_matrix(G)
     print(testMatrix.todense())
-    print("\nOur Adjacency Matrix: ")
-    print_adjacency_matrix()
+    print("\n", "Our Adjacency Matrix: ")
+    print_adjacency_matrix(create_edgelist())
 
     bc = nx.betweenness_centrality(G)
     #print(bc)
@@ -189,8 +215,12 @@ def main():
     #print(print_betweenness_centrality(E, G, vrt))
     #func not working
 
-    print("\nNetwork x shortest path length:", nx.average_shortest_path_length(G))
-    print("Our Average shortest path length:", print_average_shortest_path(E, G))
+    # print(nx.clustering(G, nodes=str(vrt)))
+#    print_betweenness_centrality(E, vrt)
+
+    print("Network x Average shortest path: ", nx.average_shortest_path_length(G))
+    print("\n", "Our Average shortest path length")
+    print_average_shortest_path(E)
 
 
 
