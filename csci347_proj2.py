@@ -56,7 +56,7 @@ def print_cluster_coefficient(edgelist, v):
     deg = print_degree(edgelist, v)
     v_list = []
     edges = 0
-    
+
     # create a list of neighbor vertices
     for i in edgelist:
         if int(i[0]) == v and i[1] not in v_list:
@@ -81,11 +81,23 @@ def print_cluster_coefficient(edgelist, v):
 # representing a graph, where each edge is a pair, and a vertex
 # index that is an integer. The output should be the betweenness
 # centrality of the input vertex.
-def print_betweenness_centrality(edgelist, v):
+def print_betweenness_centrality(edgelist, graph, v):
 
-    
+    verticies = graph.nodes
+    have_v = 0
+    tot = 0
+    for vertex1 in verticies:
+        for vertex2 in verticies:
+            if vertex1 != vertex2 and vertex1 != str(v) and vertex2 != str(v):
+                for path in nx.all_shortest_paths(graph, vertex1, vertex2):
+                    tot+=1
+                    if str(v) in path:
+                        have_v+=1
+                        print(path)
+                
 
-    print("NEEDS IMPLEMENTATION")
+    return have_v / tot
+
 
 # A function that takes the following input: a list of edges
 # representing a graph, where each edge is a pair. The output
@@ -104,7 +116,7 @@ def print_average_shortest_path(edgelist, graph):
         running_ave = running_ave / len(vertices)
         total_average += running_ave
     total_average = total_average/ len(vertices)
-    print("Average shortest path: ", total_average)
+    #print("Average shortest path: ", total_average)
     return total_average
 
 
@@ -154,30 +166,31 @@ def main():
     E = G.edges
 
 
-
     # print(G.number_of_edges())
     # create_visualization(G)
     print_vertices(E)
     # print(G.number_of_nodes())
     print("Degree of vertex", str(vrt) + ":", print_degree(E, vrt))
     # print(G.degree[str(vrt)])
+    # print("Networkx Cluster Coefficient for vertex",vrt,"=",nx.clustering(G, nodes=str(vrt)))
     print("Cluster Coefficient of vertex " + str(vrt) + ":", print_cluster_coefficient(E, vrt))
 
 
     # Adjacency Matrix Question
-    print("NetworkX Adjacency Matrix: ")
+    print("\nNetworkX Adjacency Matrix: ")
     testMatrix = nx.adjacency_matrix(G)
     print(testMatrix.todense())
-    print("\n", "Our Adjacency Matrix: ")
+    print("\nOur Adjacency Matrix: ")
     print_adjacency_matrix()
 
+    bc = nx.betweenness_centrality(G)
+    #print(bc)
+    print("\nnx.bc(",vrt,") =",bc[str(vrt)])
+    #print(print_betweenness_centrality(E, G, vrt))
+    #func not working
 
-    # print(nx.clustering(G, nodes=str(vrt)))
-#    print_betweenness_centrality(E, vrt)
-
-    print("Network x Average shortest path: ", nx.average_shortest_path_length(G))
-    print("\n", "Our Average shortest path length")
-    print(print_average_shortest_path(E, G))
+    print("\nNetwork x shortest path length:", nx.average_shortest_path_length(G))
+    print("Our Average shortest path length:", print_average_shortest_path(E, G))
 
 
 
