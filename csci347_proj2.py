@@ -10,6 +10,10 @@ Original file is located at
 import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
+
+# NOTE: Code below allows the printout of the full sized Matrix for the adjacency Matrix
+# np.set_printoptions(threshold=sys.maxsize)
 
 def create_visualization(G):
     centrality_vals = list((nx.betweenness_centrality(G, normalized=False)).values())
@@ -91,38 +95,40 @@ def print_betweenness_centrality(edgelist, v):
 # representing a graph, where each edge is a pair. The output
 # should be the average shortest path length of the graph.
 def print_average_shortest_path(edgelist):
-    print("NEEDS IMPLEMENTATION")
+    # TODO: use depth first search to find every vertex pair distance and then average
+
+    return 0
+
 
 # A function that takes the following input: a list of edges
 # representing a graph, where each edge is a pair. The output
 # should be the dense adjacency matrix of the graph.
-def print_adjacency_matrix(edgelist):
+def print_adjacency_matrix():
+    # The reason that I am creating the graph in this function is that it is less of a headache to work with the str instead of a Tuple
     E = []
+    # This includes the nodes that are self loops. It just won't mark them in the adjacency matrix
+    nodeCount = 1005
     with open("email-Eu-core.txt", "r") as file:
         for line in file:
             line = line.rstrip('\n')
             edge = line.split(' ')
             E.append(edge)
-    graph_size = 1005
-    # edge_matrix = np.matrix([ i for i in graph_size] ; [ j for j in graph_size])
+    # initialize a matrix of size
+    adjacency_matrix = np.zeros((nodeCount, nodeCount))
+    # adding all edges to the adjacency matrix
     for edge in E:
-        edge_string = str(edge[0])
-        edge_string = edge_string.zfill(3)
-        edge[0] = edge_string
-        print(edge_string)
+        # Checking if the edge is a self loop. If not add a 1 to the adjacency matrix at x vertex and at the y vertex
+        if edge[0] != edge[1]:
+            adjacency_matrix[int(edge[0])][int(edge[1])] = 1
+            adjacency_matrix[int(edge[1])][int(edge[0])] = 1
 
-    # for edge in edgelist:
-    #     edge_string = str(edge[0])
-    #     edge_string = edge_string.zfill(3)
-    #     edge[0] = tuple(map(int, edge_string.split(', ')))
+    # A compromise between printing the full matrix and a truncated one
+    # for y in adjacency_matrix:
+    #     print(y)
 
-    row = 0
-    E.sort()
-    for edge in E:
-        row += 1
-        print(edge)
-    # print(edge_matrix)
-    print("NEEDS IMPLEMENTATION")
+    # NOTE: If you want to print full adjacency matrix to check accuracy then uncomment the two lines of code at the beginning of the file
+    print(adjacency_matrix)
+    return adjacency_matrix
 
 def main():
     G = nx.Graph()
@@ -139,6 +145,8 @@ def main():
 
     E = G.edges
 
+
+
     # print(G.number_of_edges())
     # create_visualization(G)
     print_vertices(E)
@@ -146,10 +154,20 @@ def main():
     print("Degree of vertex", str(vrt) + ":", print_degree(E, vrt))
     # print(G.degree[str(vrt)])
     print("Cluster Coefficient of vertex " + str(vrt) + ":", print_cluster_coefficient(E, vrt))
+
+
+    # Adjacency Matrix Question
+    print("NetworkX Adjacency Matrix: ")
+    testMatrix = nx.adjacency_matrix(G)
+    print(testMatrix.todense())
+    print("\n", "Our Adjacency Matrix: ")
+    print_adjacency_matrix()
+
+
     # print(nx.clustering(G, nodes=str(vrt)))
 #    print_betweenness_centrality(E, vrt)
 #    print_average_shortest_path(E)
-#    print_adjacency_matrix(E)
+
 
 
 main()
