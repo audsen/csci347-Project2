@@ -94,10 +94,22 @@ def print_betweenness_centrality(edgelist, v):
 # A function that takes the following input: a list of edges
 # representing a graph, where each edge is a pair. The output
 # should be the average shortest path length of the graph.
-def print_average_shortest_path(edgelist):
-    # TODO: use depth first search to find every vertex pair distance and then average
+def print_average_shortest_path(edgelist, graph):
+    # TODO: use breadth first search  and mark all nodes to find every vertex pair distance and then average
+    total_average = 0
 
-    return 0
+    vertices = graph.nodes
+    for source_vertex in vertices:
+        vertices_copy = vertices
+        running_ave = 0
+        for target_vertex in vertices_copy:
+            if (source_vertex != target_vertex):
+                running_ave += len(nx.shortest_path(graph, source_vertex, target_vertex)) - 1
+        running_ave = running_ave / len(vertices)
+        total_average += running_ave
+    total_average = total_average/ len(vertices)
+    print("Average shortest path: ", total_average)
+    return total_average
 
 
 # A function that takes the following input: a list of edges
@@ -166,7 +178,10 @@ def main():
 
     # print(nx.clustering(G, nodes=str(vrt)))
 #    print_betweenness_centrality(E, vrt)
-#    print_average_shortest_path(E)
+
+    print("Network x Average shortest path: ", nx.average_shortest_path_length(G))
+    print("\n", "Our Average shortest path length")
+    print(print_average_shortest_path(E, G))
 
 
 
