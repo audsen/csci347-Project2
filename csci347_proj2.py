@@ -1,5 +1,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+import numpy as np
 
 def create_visualization(G):
     centrality_vals = list((nx.betweenness_centrality(G, normalized=False)).values())
@@ -83,6 +84,31 @@ def print_average_shortest_path(edgelist):
 # representing a graph, where each edge is a pair. The output
 # should be the dense adjacency matrix of the graph.
 def print_adjacency_matrix(edgelist):
+    E = []
+    with open("email-Eu-core.txt", "r") as file:
+        for line in file:
+            line = line.rstrip('\n')
+            edge = line.split(' ')
+            E.append(edge)
+    graph_size = 1005
+    # edge_matrix = np.matrix([ i for i in graph_size] ; [ j for j in graph_size])
+    for edge in E:
+        edge_string = str(edge[0])
+        edge_string = edge_string.zfill(3)
+        edge[0] = edge_string
+        print(edge_string)
+
+    # for edge in edgelist:
+    #     edge_string = str(edge[0])
+    #     edge_string = edge_string.zfill(3)
+    #     edge[0] = tuple(map(int, edge_string.split(', ')))
+
+    row = 0
+    E.sort()
+    for edge in E:
+        row += 1
+        print(edge)
+    # print(edge_matrix)
     print("NEEDS IMPLEMENTATION")
 
 def main():
@@ -97,11 +123,16 @@ def main():
             E.append(edge)            
 
     G.add_edges_from(E)
-#    create_visualization(G)
-    
+    # create_visualization(G)
     print_vertices(E)
     print_degree(E, vrt)
     print_cluster_coefficient(E, vrt)
+
+    print_adjacency_matrix(E)
+    # print(G.nodes)
+    # print(nx.adjacency_matrix(G))
+
+
 #    print_betweenness_centrality(E, vrt)
 #    print_average_shortest_path(E)
 #    print_adjacency_matrix(E)
