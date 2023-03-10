@@ -103,34 +103,6 @@ def print_betweenness_centrality(edgelist, v):
             graph.add_edge(edge[0], edge[1])
 
     vertices = graph.nodes
-
-    # Taking the total
-    '''total_betweenness = 0
-    vertices_copy = np.asanyarray(graph.nodes)
-    for source_vertex in vertices:
-        for target_vertex in vertices:
-            if source_vertex != target_vertex:
-                # TODO: Fix the conditional below
-                # if vertices_copy.__contains__(target_vertex):
-                    # Reset the counters for every pair of vertices
-                    betweenness = 0
-                    count = 0
-                    # Iterate through every list of shortest paths and add 1 to the count of shortest paths
-                    for path in nx.all_shortest_paths(graph, source_vertex, target_vertex):
-                        count += 1
-                        # Iterate through given path and check to see if it contains v
-                        for node in path:
-                            # If the given vertex is in the path add to the betweenness
-                            if node == v:
-                                betweenness += 1
-                    # add the betweenness / count to the total betweenness centrality
-                    total_betweenness += betweenness / count
-
-        # NOTE: Doesn't work but this could help with efficiency & is needed for accuracy
-        # Take the source vertex out of the node_copy list. Then write a conditional that checks
-        # vertices_copy.delete(source_vertex)
-        print(total_betweenness)'''
-    
     
     bc = 0
 
@@ -158,7 +130,7 @@ def print_betweenness_centrality(edgelist, v):
                         #print(path)
                 
                 # calculate betweenness for v1 and v2 and add it to bc
-            bc += (have_v / tot)
+                bc += (have_v / tot)
                 
     return bc
 
@@ -265,7 +237,6 @@ def main():
     # print("Networkx Cluster Coefficient for vertex",vrt,"=",nx.clustering(G, nodes=str(vrt)))
     print("Cluster Coefficient of vertex " + str(vrt) + ":", print_cluster_coefficient(E, vrt))
 
-
     # Adjacency Matrix Question
     print("\nNetworkX Adjacency Matrix: ")
     testMatrix = nx.adjacency_matrix(G)
@@ -273,14 +244,12 @@ def main():
     print("\n", "Our Adjacency Matrix: ")
     print_adjacency_matrix(create_edgelist())
 
+    #print("NX betweenness centrality: ", nx.betweenness_centrality(G, vrt))
 
-    print("NX betweenness centrality: ", nx.betweenness_centrality(G, vrt))
+    # NOTE: this func follows the betweenness centrality equation,
+    #       however it takes over an hour in some cases to execute
+    #       which is why it is still commented out.
     #print(print_betweenness_centrality(E, vrt))
-    # still not working, will take a look tomorrow morning
-
-
-    # print(nx.clustering(G, nodes=str(vrt)))
-
 
     print("Network x Average shortest path: ", nx.average_shortest_path_length(G))
     print("\n", "Our Average shortest path length")
